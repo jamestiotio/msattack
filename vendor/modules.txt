@@ -1,0 +1,38 @@
+# github.com/andybalholm/brotli v1.0.4
+## explicit; go 1.12
+github.com/andybalholm/brotli
+# github.com/gofiber/fiber/v2 v2.38.1
+## explicit; go 1.19
+github.com/gofiber/fiber/v2
+github.com/gofiber/fiber/v2/internal/bytebufferpool
+github.com/gofiber/fiber/v2/internal/colorable
+github.com/gofiber/fiber/v2/internal/dictpool
+github.com/gofiber/fiber/v2/internal/fwd
+github.com/gofiber/fiber/v2/internal/isatty
+github.com/gofiber/fiber/v2/internal/msgp
+github.com/gofiber/fiber/v2/internal/schema
+github.com/gofiber/fiber/v2/internal/uuid
+github.com/gofiber/fiber/v2/middleware/cors
+github.com/gofiber/fiber/v2/utils
+# github.com/klauspost/compress v1.15.11
+## explicit; go 1.17
+github.com/klauspost/compress/flate
+github.com/klauspost/compress/gzip
+github.com/klauspost/compress/zlib
+# github.com/valyala/bytebufferpool v1.0.0
+## explicit
+github.com/valyala/bytebufferpool
+# github.com/valyala/fasthttp v1.40.0
+## explicit; go 1.15
+github.com/valyala/fasthttp
+github.com/valyala/fasthttp/fasthttputil
+github.com/valyala/fasthttp/reuseport
+github.com/valyala/fasthttp/stackless
+# github.com/valyala/tcplisten v1.0.0
+## explicit; go 1.12
+github.com/valyala/tcplisten
+# golang.org/x/sys v0.1.0
+## explicit; go 1.17
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+golang.org/x/sys/windows

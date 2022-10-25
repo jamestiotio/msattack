@@ -13,3 +13,28 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Go workspace file
+go.work
+
+# Go Patch
+Godeps/
+
+# OS generated
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+[Tt]humbs.db
+[Dd]esktop.ini
+
+# IDE-specific directories and files
+.idea/
+.vscode/
+.dccache
+
+# Binary data
+data/*
+!data/.gitkeep
