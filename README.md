@@ -84,6 +84,14 @@ This error might be caused by your antivirus or/and firewall on a Windows machin
 
 This error is derived from the server being unable to bind to a certain port. Ensure that there are no other processes using the same port numbers as the private server. If you are running on an operating system that restricts ports below `1024` to privileged users only (i.e., not Windows), choose a different port above `1024` for the private server and point the proxy server to that port.
 
-## Disclaimer
+## Legal Disclaimers
 
-METAL SLUG, METAL SLUG ATTACK and all related trademarks are the property of [SNK CORPORATION](https://www.snk-corp.co.jp/). This project is not affiliated, endorsed or supported in any way by [SNK CORPORATION](https://www.snk-corp.co.jp/). The use of information and software provided through this project may be used at your own risk. The information and software available through this project are provided as-is without any warranty or guarantee. By using this project you agree that: (1) We take no liability under any circumstance or legal theory for any software, error, omissions, loss of data or damage of any kind related to your use or exposure to any information provided through this project; (2) All software are made "AS AVAILABLE" and "AS IS" without any warranty or guarantee. All express and implied warranties are disclaimed. Some states do not allow limitations of incidental or consequential damages or on how long an implied warranty lasts, so the above may not apply to you.
+- METAL SLUG, METAL SLUG ATTACK and all related trademarks are the property of [SNK CORPORATION](https://www.snk-corp.co.jp/). This project is not affiliated, endorsed or supported in any way by [SNK CORPORATION](https://www.snk-corp.co.jp/). The use of information and software provided through this project may be used at your own risk. The information and software available through this project are provided as-is without any warranty or guarantee. By using this project you agree that: (1) We take no liability under any circumstance or legal theory for any software, error, omissions, loss of data or damage of any kind related to your use or exposure to any information provided through this project; (2) All software are made "AS AVAILABLE" and "AS IS" without any warranty or guarantee. All express and implied warranties are disclaimed. Some states do not allow limitations of incidental or consequential damages or on how long an implied warranty lasts, so the above may not apply to you.
+
+- This project is non-commercial. The source code is available for free and always will be.
+
+- This is a black-box re-implementation project. The code in this project was written by observing the game running and inspecting the behavior and data being transmitted between the game process and the backend server.
+
+- If you want to contribute to this repository, your contribution must be either your own original code or open-source code with a clear acknowledgement of its origin. No code that was acquired through reverse engineering executable binaries or binary files will be accepted.
+
+- No assets from the original game are included in this repository.
