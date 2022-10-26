@@ -4,6 +4,8 @@
 *.dll
 *.so
 *.dylib
+*.o
+*.a
 
 # Test binary, built with `go test -c`
 *.test
@@ -20,6 +22,9 @@ go.work
 # Go Patch
 Godeps/
 
+/Gopkg.lock
+/Gopkg.toml
+
 # OS generated
 .DS_Store
 ._*
@@ -31,8 +36,8 @@ ehthumbs.db
 [Dd]esktop.ini
 
 # IDE-specific directories and files
-.idea/
-.vscode/
+/.idea/
+/.vscode/
 .dccache
 
 # Binary data

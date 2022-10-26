@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
+	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -18,8 +20,22 @@ func welcome(c *fiber.Ctx) error {
 }
 
 func main() {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		JSONEncoder: sonic.Marshal,
+		JSONDecoder: sonic.Unmarshal,
+	})
+
 	app.Use(cors.New())
+
+	app.Use(func(c *fiber.Ctx) error {
+		c.Set("Date", time.Now().Format(time.RFC1123))
+		c.Set("Server", "Apache")
+		c.Set("Vary", "Accept-Encoding")
+		c.Set("Content-Encoding", "gzip")
+		c.Set("Connection", "close")
+		c.Set("MSA-Signature", "https://github.com/jamestiotio/msattack")
+		return c.Next()
+	})
 
 	port := ":42069"
 
