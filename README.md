@@ -88,7 +88,7 @@ This error is derived from the server being unable to bind to a certain port. En
 
 - METAL SLUG, METAL SLUG ATTACK and all related trademarks are the property of [SNK CORPORATION](https://www.snk-corp.co.jp/). This project is not affiliated, endorsed or supported in any way by [SNK CORPORATION](https://www.snk-corp.co.jp/). The use of information and software provided through this project may be used at your own risk. The information and software available through this project are provided as-is without any warranty or guarantee. By using this project you agree that: (1) We take no liability under any circumstance or legal theory for any software, error, omissions, loss of data or damage of any kind related to your use or exposure to any information provided through this project; (2) All software are made "AS AVAILABLE" and "AS IS" without any warranty or guarantee. All express and implied warranties are disclaimed. Some states do not allow limitations of incidental or consequential damages or on how long an implied warranty lasts, so the above may not apply to you.
 
-- This project is non-commercial. The source code is available for free and always will be.
+- This project is non-commercial. The source code is available for free (both gratis and libre) and always will be.
 
 - This is a black-box re-implementation project. The code in this project was written by observing the game running and inspecting the behavior and data being transmitted between the game process and the backend server.
 
