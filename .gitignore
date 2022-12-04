@@ -36,10 +36,26 @@ ehthumbs.db
 [Dd]esktop.ini
 
 # IDE-specific directories and files
-/.idea/
-/.vscode/
+.idea/
+.vscode/**/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# Ignore all local history of files
+.history
+.ionide
+
 .dccache
 
 # Binary data
-data/*
-!data/.gitkeep
+/data/*
+!/data/.gitkeep
