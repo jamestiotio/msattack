@@ -52,6 +52,7 @@ class AssetDownloader:
                     print(f"File {filename} already exists. Skipping...")
 
         elif MASTER_TABLE_URL in flow.request.pretty_url:
+            # Some request URLs can contain multiple table keys (just grab all of them)
             table_key_values = parse.parse_qs(
                 parse.urlparse(flow.request.pretty_url, allow_fragments=False).query
             )["table[]"]
