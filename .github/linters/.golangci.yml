@@ -10,7 +10,6 @@ linters:
   enable:
     - asciicheck
     - bodyclose
-    - deadcode
     - depguard
     - gci
     - gocritic
@@ -25,13 +24,11 @@ linters:
     - nilerr
     - rowserrcheck
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unused
     - unparam
-    - varcheck
     - whitespace
   disable:
     - errcheck
