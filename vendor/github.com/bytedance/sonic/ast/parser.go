@@ -18,13 +18,8 @@ package ast
 
 import (
     `fmt`
-    `unsafe`
-
-    `github.com/bytedance/sonic/decoder`
-    `github.com/bytedance/sonic/internal/native`
     `github.com/bytedance/sonic/internal/native/types`
     `github.com/bytedance/sonic/internal/rt`
-    `github.com/bytedance/sonic/unquote`
 )
 
 const _DEFAULT_NODE_CAP int = 16
@@ -112,12 +107,6 @@ func (self *Parser) lspace(sp int) int {
     return sp
 }
 
-func (self *Parser) decodeValue() (val types.JsonState) {
-    sv := (*rt.GoString)(unsafe.Pointer(&self.s))
-    self.p = native.Value(sv.Ptr, sv.Len, self.p, &val, 0)
-    return
-}
-
 func (self *Parser) decodeArray(ret []Node) (Node, types.ParsingError) {
     sp := self.p
     ns := len(self.s)
@@ -141,7 +130,7 @@ func (self *Parser) decodeArray(ret []Node) (Node, types.ParsingError) {
         if self.skipValue {
             /* skip the value */
             var start int
-            if start, err = self.skip(); err != 0 {
+            if start, err = self.skipFast(); err != 0 {
                 return Node{}, err
             }
             if self.p > ns {
@@ -213,7 +202,7 @@ func (self *Parser) decodeObject(ret []Pair) (Node, types.ParsingError) {
 
         /* check for escape sequence */
         if njs.Ep != -1 {
-            if key, err = unquote.String(key); err != 0 {
+            if key, err = unquote(key); err != 0 {
                 return Node{}, err
             }
         }
@@ -227,7 +216,7 @@ func (self *Parser) decodeObject(ret []Pair) (Node, types.ParsingError) {
         if self.skipValue {
             /* skip the value */
             var start int
-            if start, err = self.skip(); err != 0 {
+            if start, err = self.skipFast(); err != 0 {
                 return Node{}, err
             }
             if self.p > ns {
@@ -238,7 +227,7 @@ func (self *Parser) decodeObject(ret []Pair) (Node, types.ParsingError) {
                 return Node{}, types.ERR_INVALID_CHAR
             }
             val = newRawNode(self.s[start:self.p], t)
-        }else{
+        } else {
             /* decode the value */
             if val, err = self.Parse(); err != 0 {
                 return Node{}, err
@@ -277,14 +266,13 @@ func (self *Parser) decodeString(iv int64, ep int) (Node, types.ParsingError) {
     }
 
     /* unquote the string */
-    buf := make([]byte, 0, len(s))
-    err := unquote.IntoBytes(s, &buf)
+    out, err := unquote(s)
 
     /* check for errors */
     if err != 0 {
         return Node{}, err
     } else {
-        return newBytes(buf), 0
+        return newBytes(rt.Str2Mem(out)), 0
     }
 }
 
@@ -315,17 +303,6 @@ func (self *Parser) Parse() (Node, types.ParsingError) {
         case types.V_INTEGER : return NewNumber(self.s[val.Ep:self.p]), 0
         default              : return Node{}, types.ParsingError(-val.Vt)
     }
-}
-
-func (self *Parser) skip() (int, types.ParsingError) {
-    fsm := types.NewStateMachine()
-    start := native.SkipOne(&self.s, &self.p, fsm, uint64(0))
-    types.FreeStateMachine(fsm)
-    
-    if start < 0 {
-        return self.p, types.ParsingError(-start)
-    }
-    return start, 0
 }
 
 func (self *Parser) searchKey(match string) types.ParsingError {
@@ -361,7 +338,7 @@ func (self *Parser) searchKey(match string) types.ParsingError {
 
         /* check for escape sequence */
         if njs.Ep != -1 {
-            if key, err = unquote.String(key); err != 0 {
+            if key, err = unquote(key); err != 0 {
                 return err
             }
         }
@@ -470,7 +447,7 @@ func (self *Node) skipNextNode() *Node {
 
     var val Node
     /* skip the value */
-    if start, err := parser.skip(); err != 0 {
+    if start, err := parser.skipFast(); err != 0 {
         return newSyntaxError(parser.syntaxError(err))
     } else {
         t := switchRawType(parser.s[start])
@@ -542,7 +519,7 @@ func (self *Node) skipNextPair() (*Pair) {
 
     /* check for escape sequence */
     if njs.Ep != -1 {
-        if key, err = unquote.String(key); err != 0 {
+        if key, err = unquote(key); err != 0 {
             return &Pair{key, *newSyntaxError(parser.syntaxError(err))}
         }
     }
@@ -553,7 +530,7 @@ func (self *Node) skipNextPair() (*Pair) {
     }
 
     /* skip the value */
-    if start, err := parser.skip(); err != 0 {
+    if start, err := parser.skipFast(); err != 0 {
         return &Pair{key, *newSyntaxError(parser.syntaxError(err))}
     } else {
         t := switchRawType(parser.s[start])
@@ -633,17 +610,9 @@ func (self *Parser) ExportError(err types.ParsingError) error {
     if err == _ERR_NOT_FOUND {
         return ErrNotExist
     }
-    return fmt.Errorf("%q", decoder.SyntaxError{
+    return fmt.Errorf("%q", SyntaxError{
         Pos : self.p,
         Src : self.s,
         Code: err,
     }.Description())
-}
-
-func (self *Parser) syntaxError(err types.ParsingError) *decoder.SyntaxError {
-    return &decoder.SyntaxError{
-        Pos : self.p,
-        Src : self.s,
-        Code: err,
-    }
 }

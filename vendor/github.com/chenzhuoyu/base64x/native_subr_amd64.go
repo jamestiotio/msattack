@@ -9,11 +9,21 @@ package base64x
 func __native_entry__() uintptr
 
 var (
-    _subr__b64decode = __native_entry__() + 1502
-    _subr__b64encode = __native_entry__() + 237
+    _subr__b64decode = __native_entry__() + 1563
+    _subr__b64encode = __native_entry__() + 301
+)
+
+const (
+    _stack__b64decode = 128
+    _stack__b64encode = 40
 )
 
 var (
     _ = _subr__b64decode
     _ = _subr__b64encode
+)
+
+const (
+    _ = _stack__b64decode
+    _ = _stack__b64encode
 )
