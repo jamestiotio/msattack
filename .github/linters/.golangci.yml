@@ -1,34 +1,61 @@
 run:
   concurrency: 4
   timeout: 5m
+  issues-exit-code: 1
   skip-dirs-use-default: true
 
 issues:
   new: true
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - govet
+        - noctx
 
 linters:
   enable:
-    - asciicheck
     - bodyclose
+    - deadcode
     - depguard
-    - gci
+    - durationcheck
+    - errcheck
+    - errname
+    - errorlint
+    - exportloopref
+    - forcetypeassert
+    - gochecknoinits
     - gocritic
-    - gofmt
-    - gofumpt
+    - godot
+    - goerr113
     - goimports
     - goprintffuncname
+    - gosec
     - gosimple
     - govet
     - ineffassign
+    - makezero
     - misspell
+    - nakedret
     - nilerr
+    - noctx
+    - nolintlint
+    - prealloc
+    - predeclared
     - rowserrcheck
+    - sqlclosecheck
     - staticcheck
+    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unused
-    - unparam
+    - varcheck
+    - wastedassign
     - whitespace
-  disable:
-    - errcheck
+
+output:
+  sort-results: true
