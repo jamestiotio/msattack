@@ -670,7 +670,7 @@ func (ctx *RequestCtx) Hijacked() bool {
 // All the values are removed from ctx after returning from the top
 // RequestHandler. Additionally, Close method is called on each value
 // implementing io.Closer before removing the value from ctx.
-func (ctx *RequestCtx) SetUserValue(key string, value interface{}) {
+func (ctx *RequestCtx) SetUserValue(key interface{}, value interface{}) {
 	ctx.userValues.Set(key, value)
 }
 
@@ -688,7 +688,7 @@ func (ctx *RequestCtx) SetUserValueBytes(key []byte, value interface{}) {
 }
 
 // UserValue returns the value stored via SetUserValue* under the given key.
-func (ctx *RequestCtx) UserValue(key string) interface{} {
+func (ctx *RequestCtx) UserValue(key interface{}) interface{} {
 	return ctx.userValues.Get(key)
 }
 
@@ -698,11 +698,24 @@ func (ctx *RequestCtx) UserValueBytes(key []byte) interface{} {
 	return ctx.userValues.GetBytes(key)
 }
 
-// VisitUserValues calls visitor for each existing userValue.
+// VisitUserValues calls visitor for each existing userValue with a key that is a string or []byte.
 //
 // visitor must not retain references to key and value after returning.
 // Make key and/or value copies if you need storing them after returning.
 func (ctx *RequestCtx) VisitUserValues(visitor func([]byte, interface{})) {
+	for i, n := 0, len(ctx.userValues); i < n; i++ {
+		kv := &ctx.userValues[i]
+		if _, ok := kv.key.(string); ok {
+			visitor(s2b(kv.key.(string)), kv.value)
+		}
+	}
+}
+
+// VisitUserValuesAll calls visitor for each existing userValue.
+//
+// visitor must not retain references to key and value after returning.
+// Make key and/or value copies if you need storing them after returning.
+func (ctx *RequestCtx) VisitUserValuesAll(visitor func(interface{}, interface{})) {
 	for i, n := 0, len(ctx.userValues); i < n; i++ {
 		kv := &ctx.userValues[i]
 		visitor(kv.key, kv.value)
@@ -715,7 +728,7 @@ func (ctx *RequestCtx) ResetUserValues() {
 }
 
 // RemoveUserValue removes the given key and the value under it in ctx.
-func (ctx *RequestCtx) RemoveUserValue(key string) {
+func (ctx *RequestCtx) RemoveUserValue(key interface{}) {
 	ctx.userValues.Remove(key)
 }
 
@@ -1816,6 +1829,17 @@ func (s *Server) Serve(ln net.Listener) error {
 //
 // Shutdown does not close keepalive connections so its recommended to set ReadTimeout and IdleTimeout to something else than 0.
 func (s *Server) Shutdown() error {
+	return s.ShutdownWithContext(context.Background())
+}
+
+// ShutdownWithContext gracefully shuts down the server without interrupting any active connections.
+// ShutdownWithContext works by first closing all open listeners and then waiting for all connections to return to idle or context timeout and then shut down.
+//
+// When ShutdownWithContext is called, Serve, ListenAndServe, and ListenAndServeTLS immediately return nil.
+// Make sure the program doesn't exit and waits instead for Shutdown to return.
+//
+// ShutdownWithContext does not close keepalive connections so its recommended to set ReadTimeout and IdleTimeout to something else than 0.
+func (s *Server) ShutdownWithContext(ctx context.Context) (err error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -1827,7 +1851,7 @@ func (s *Server) Shutdown() error {
 	}
 
 	for _, ln := range s.ln {
-		if err := ln.Close(); err != nil {
+		if err = ln.Close(); err != nil {
 			return err
 		}
 	}
@@ -1838,7 +1862,10 @@ func (s *Server) Shutdown() error {
 
 	// Closing the listener will make Serve() call Stop on the worker pool.
 	// Setting .stop to 1 will make serveConn() break out of its loop.
-	// Now we just have to wait until all workers are done.
+	// Now we just have to wait until all workers are done or timeout.
+	ticker := time.NewTicker(time.Millisecond * 100)
+	defer ticker.Stop()
+END:
 	for {
 		s.closeIdleConns()
 
@@ -1848,37 +1875,23 @@ func (s *Server) Shutdown() error {
 		// This is not an optimal solution but using a sync.WaitGroup
 		// here causes data races as it's hard to prevent Add() to be called
 		// while Wait() is waiting.
-		time.Sleep(time.Millisecond * 100)
+		select {
+		case <-ctx.Done():
+			err = ctx.Err()
+			break END
+		case <-ticker.C:
+			continue
+		}
 	}
 
 	s.done = nil
 	s.ln = nil
-	return nil
+	return err
 }
 
 func acceptConn(s *Server, ln net.Listener, lastPerIPErrorTime *time.Time) (net.Conn, error) {
 	for {
-		var c net.Conn
-		var err error
-		if tl, ok := ln.(*net.TCPListener); ok && s.TCPKeepalive {
-			var tc *net.TCPConn
-			tc, err = tl.AcceptTCP()
-			if err == nil {
-				if err := tc.SetKeepAlive(s.TCPKeepalive); err != nil {
-					tc.Close() //nolint:errcheck
-					return nil, err
-				}
-				if s.TCPKeepalivePeriod > 0 {
-					if err := tc.SetKeepAlivePeriod(s.TCPKeepalivePeriod); err != nil {
-						tc.Close() //nolint:errcheck
-						return nil, err
-					}
-				}
-				c = tc
-			}
-		} else {
-			c, err = ln.Accept()
-		}
+		c, err := ln.Accept()
 		if err != nil {
 			if c != nil {
 				panic("BUG: net.Listener returned non-nil conn and non-nil error")
@@ -1897,6 +1910,20 @@ func acceptConn(s *Server, ln net.Listener, lastPerIPErrorTime *time.Time) (net.
 		if c == nil {
 			panic("BUG: net.Listener returned (nil, nil)")
 		}
+
+		if tc, ok := c.(*net.TCPConn); ok && s.TCPKeepalive {
+			if err := tc.SetKeepAlive(s.TCPKeepalive); err != nil {
+				tc.Close() //nolint:errcheck
+				return nil, err
+			}
+			if s.TCPKeepalivePeriod > 0 {
+				if err := tc.SetKeepAlivePeriod(s.TCPKeepalivePeriod); err != nil {
+					tc.Close() //nolint:errcheck
+					return nil, err
+				}
+			}
+		}
+
 		if s.MaxConnsPerIP > 0 {
 			pic := wrapPerIPConn(s, c)
 			if pic == nil {
@@ -2096,7 +2123,7 @@ func (s *Server) serveConn(c net.Conn) (err error) {
 
 		connectionClose bool
 
-		continueReadingRequest bool = true
+		continueReadingRequest = true
 	)
 	for {
 		connRequestNum++
@@ -2696,10 +2723,7 @@ func (ctx *RequestCtx) Err() error {
 // This method is present to make RequestCtx implement the context interface.
 // This method is the same as calling ctx.UserValue(key)
 func (ctx *RequestCtx) Value(key interface{}) interface{} {
-	if keyString, ok := key.(string); ok {
-		return ctx.UserValue(keyString)
-	}
-	return nil
+	return ctx.UserValue(key)
 }
 
 var fakeServer = &Server{

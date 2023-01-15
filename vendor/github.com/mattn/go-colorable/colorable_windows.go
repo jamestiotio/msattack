@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/gofiber/fiber/v2/internal/isatty"
+	"github.com/mattn/go-isatty"
 )
 
 const (
@@ -452,17 +452,21 @@ func (w *Writer) Write(data []byte) (n int, err error) {
 	} else {
 		er = bytes.NewReader(data)
 	}
-	var bw [1]byte
+	var plaintext bytes.Buffer
 loop:
 	for {
 		c1, err := er.ReadByte()
 		if err != nil {
+			plaintext.WriteTo(w.out)
 			break loop
 		}
 		if c1 != 0x1b {
-			bw[0] = c1
-			w.out.Write(bw[:])
+			plaintext.WriteByte(c1)
 			continue
+		}
+		_, err = plaintext.WriteTo(w.out)
+		if err != nil {
+			break loop
 		}
 		c2, err := er.ReadByte()
 		if err != nil {
@@ -719,7 +723,7 @@ loop:
 									n256setup()
 								}
 								attr &= backgroundMask
-								attr |= n256foreAttr[n256]
+								attr |= n256foreAttr[n256%len(n256foreAttr)]
 								i += 2
 							}
 						} else if len(token) == 5 && token[i+1] == "2" {
@@ -761,7 +765,7 @@ loop:
 									n256setup()
 								}
 								attr &= foregroundMask
-								attr |= n256backAttr[n256]
+								attr |= n256backAttr[n256%len(n256backAttr)]
 								i += 2
 							}
 						} else if len(token) == 5 && token[i+1] == "2" {
