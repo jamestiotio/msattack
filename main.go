@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -21,7 +22,8 @@ func main() {
 	viper.SetConfigFile("./config/config.yml")
 	if err := viper.ReadInConfig(); err != nil {
 		fmt.Printf("Error reading config file: %s\n", err)
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		var configNotFoundError viper.ConfigFileNotFoundError
+		if ok := errors.As(err, &configNotFoundError); ok {
 			fmt.Printf("Please create a config.yml file in the config folder.")
 		} else {
 			fmt.Printf("Please ensure that the config.yml file is readable.")
