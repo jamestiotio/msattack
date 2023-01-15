@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package sse4
+package sse
 
 var (
     S_f64toa = _subr__f64toa
@@ -41,7 +41,9 @@ var (
 
 var (
     S_skip_one    = _subr__skip_one
+    S_skip_one_fast = _subr__skip_one_fast
     S_skip_array  = _subr__skip_array
     S_skip_object = _subr__skip_object
     S_skip_number = _subr__skip_number
+    S_get_by_path = _subr__get_by_path
 )

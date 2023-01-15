@@ -28,7 +28,7 @@ import (
 
 const (
     _MinSlice = 16
-    _MaxStack = 65536 // 64k slots
+    _MaxStack = 4096 // 4k slots
     _MaxStackBytes = _MaxStack * _PtrBytes
     _MaxDigitNums = 800  // used in atof fallback algorithm
 )
@@ -147,7 +147,7 @@ func referenceFields(v *caching.FieldMap) int64 {
     return int64(uintptr(unsafe.Pointer(v)))
 }
 
-func makeDecoder(vt *rt.GoType) (interface{}, error) {
+func makeDecoder(vt *rt.GoType, _ ...interface{}) (interface{}, error) {
     if pp, err := newCompiler().compile(vt.Pack()); err != nil {
         return nil, err
     } else {

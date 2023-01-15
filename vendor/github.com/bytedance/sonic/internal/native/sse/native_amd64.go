@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package sse4
+package sse
 
 import (
     `unsafe`
@@ -43,11 +43,6 @@ func __f64toa(out *byte, val float64) (ret int)
 //go:noescape
 //goland:noinspection GoUnusedParameter
 func __f32toa(out *byte, val float32) (ret int)
-
-//go:nosplit
-//go:noescape
-//goland:noinspection GoUnusedParameter
-func __lzero(p unsafe.Pointer, n int) (ret int)
 
 //go:nosplit
 //go:noescape
@@ -102,6 +97,11 @@ func __skip_one(s *string, p *int, m *types.StateMachine, flags uint64) (ret int
 //go:nosplit
 //go:noescape
 //goland:noinspection GoUnusedParameter
+func __skip_one_fast(s *string, p *int) (ret int)
+
+//go:nosplit
+//go:noescape
+//goland:noinspection GoUnusedParameter
 func __skip_array(s *string, p *int, m *types.StateMachine, flags uint64) (ret int)
 
 //go:nosplit
@@ -118,3 +118,8 @@ func __skip_number(s *string, p *int) (ret int)
 //go:noescape
 //goland:noinspection GoUnusedParameter
 func __validate_one(s *string, p *int, m *types.StateMachine) (ret int)
+
+//go:nosplit
+//go:noescape
+//goland:noinspection GoUnusedParameter
+func __get_by_path(s *string, p *int, path *[]interface{}) (ret int)
