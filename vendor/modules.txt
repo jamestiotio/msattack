@@ -26,14 +26,11 @@ github.com/chenzhuoyu/base64x
 # github.com/fsnotify/fsnotify v1.6.0
 ## explicit; go 1.16
 github.com/fsnotify/fsnotify
-# github.com/gofiber/fiber/v2 v2.38.1
+# github.com/gofiber/fiber/v2 v2.41.0
 ## explicit; go 1.19
 github.com/gofiber/fiber/v2
-github.com/gofiber/fiber/v2/internal/bytebufferpool
-github.com/gofiber/fiber/v2/internal/colorable
 github.com/gofiber/fiber/v2/internal/dictpool
 github.com/gofiber/fiber/v2/internal/fwd
-github.com/gofiber/fiber/v2/internal/isatty
 github.com/gofiber/fiber/v2/internal/msgp
 github.com/gofiber/fiber/v2/internal/schema
 github.com/gofiber/fiber/v2/internal/uuid
@@ -62,6 +59,15 @@ github.com/klauspost/cpuid/v2
 # github.com/magiconair/properties v1.8.6
 ## explicit; go 1.13
 github.com/magiconair/properties
+# github.com/mattn/go-colorable v0.1.13
+## explicit; go 1.15
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.17
+## explicit; go 1.15
+github.com/mattn/go-isatty
+# github.com/mattn/go-runewidth v0.0.14
+## explicit; go 1.9
+github.com/mattn/go-runewidth
 # github.com/mitchellh/mapstructure v1.5.0
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
@@ -74,6 +80,9 @@ github.com/pelletier/go-toml/v2
 github.com/pelletier/go-toml/v2/internal/ast
 github.com/pelletier/go-toml/v2/internal/danger
 github.com/pelletier/go-toml/v2/internal/tracker
+# github.com/rivo/uniseg v0.2.0
+## explicit; go 1.12
+github.com/rivo/uniseg
 # github.com/spf13/afero v1.9.2
 ## explicit; go 1.16
 github.com/spf13/afero
@@ -124,8 +133,8 @@ github.com/twitchyliquid64/golang-asm/unsafeheader
 # github.com/valyala/bytebufferpool v1.0.0
 ## explicit
 github.com/valyala/bytebufferpool
-# github.com/valyala/fasthttp v1.40.0
-## explicit; go 1.15
+# github.com/valyala/fasthttp v1.43.0
+## explicit; go 1.16
 github.com/valyala/fasthttp
 github.com/valyala/fasthttp/fasthttputil
 github.com/valyala/fasthttp/reuseport
