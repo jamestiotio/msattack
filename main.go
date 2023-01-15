@@ -6,12 +6,13 @@ import (
 	"os"
 	"time"
 
+	"msattack/config"
+	"msattack/utils"
+
 	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/spf13/viper"
-	"msattack/config"
-	"msattack/utils"
 )
 
 func main() {

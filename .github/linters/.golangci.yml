@@ -32,9 +32,3 @@ linters:
     - whitespace
   disable:
     - errcheck
-
-linters-settings:
-  gci:
-    local-prefixes: github.com/jamestiotio
-  goimports:
-    local-prefixes: github.com/jamestiotio

@@ -1,0 +1,8 @@
+{
+  "go.formatTool": "gofumpt",
+  "go.toolsManagement.autoUpdate": true,
+  "go.useLanguageServer": true,
+  "gopls": {
+    "formatting.gofumpt": true
+  }
+}
