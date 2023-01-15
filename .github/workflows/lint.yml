@@ -1,0 +1,35 @@
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - main
+    paths:
+      - "**/*.go"
+      - ".github/workflows/linter.yml"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "**/*.go"
+      - ".github/workflows/linter.yml"
+permissions:
+  contents: read
+  # Optional: allow read access to pull request. Use with `only-new-issues` option.
+  # pull-requests: read
+name: Lint
+jobs:
+  golint:
+    name: Go Lint
+    permissions:
+      contents: read  # for actions/checkout to fetch code
+      pull-requests: read  # for golangci/golangci-lint-action to fetch pull requests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Repository
+        uses: actions/checkout@v3
+      - name: Run Golint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --config=.github/linters/.golangci.yml
+          only-new-issues: true

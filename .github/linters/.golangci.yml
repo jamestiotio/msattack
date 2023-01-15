@@ -1,0 +1,43 @@
+run:
+  concurrency: 4
+  timeout: 5m
+  skip-dirs-use-default: true
+
+issues:
+  new: true
+
+linters:
+  enable:
+    - asciicheck
+    - bodyclose
+    - deadcode
+    - depguard
+    - gci
+    - gocritic
+    - gofmt
+    - gofumpt
+    - goimports
+    - goprintffuncname
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - nilerr
+    - rowserrcheck
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unused
+    - unparam
+    - varcheck
+    - whitespace
+  disable:
+    - errcheck
+
+linters-settings:
+  gci:
+    local-prefixes: github.com/jamestiotio
+  goimports:
+    local-prefixes: github.com/jamestiotio
