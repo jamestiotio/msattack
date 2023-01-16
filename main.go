@@ -24,15 +24,20 @@ func main() {
 		fmt.Printf("Error reading config file: %s\n", err)
 		var configNotFoundError viper.ConfigFileNotFoundError
 		if ok := errors.As(err, &configNotFoundError); ok {
-			fmt.Printf("Please create a config.yml file in the config folder.")
+			fmt.Println("Please create a config.yml file in the config folder.")
 		} else {
-			fmt.Printf("Please ensure that the config.yml file is readable.")
+			fmt.Println("Please ensure that the config.yml file is readable.")
 		}
 		os.Exit(1)
 	}
 	if err := viper.Unmarshal(&configuration); err != nil {
 		fmt.Printf("Error decoding config file: %s\n", err)
-		fmt.Printf("Please check that the config.yml file is valid and properly formatted as a YAML file.")
+		fmt.Println("Please check that the config.yml file is valid and properly formatted as a YAML file.")
+		os.Exit(1)
+	}
+
+	if configuration.Port <= 0 {
+		fmt.Println("Error: Port in config file must be a positive integer.")
 		os.Exit(1)
 	}
 
@@ -54,14 +59,9 @@ func main() {
 		return c.Next()
 	})
 
-	port := fmt.Sprintf(":%d", configuration.Port)
+	fmt.Println("Spinning up server on port:", configuration.Port)
 
-	args := os.Args
-	if len(args) > 1 {
-		port = args[1]
-		fmt.Println("Spinning up server on port:", port)
-		return
-	}
+	port := fmt.Sprintf(":%d", configuration.Port)
 
 	app.Get("/", utils.WelcomeMessage)
 
