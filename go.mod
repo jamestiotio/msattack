@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/bytedance/sonic v1.7.0
 	github.com/gofiber/fiber/v2 v2.41.0
+	github.com/rs/zerolog v1.28.0
 )
 
 require (
@@ -40,5 +41,5 @@ require (
 	github.com/valyala/fasthttp v1.43.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
 )

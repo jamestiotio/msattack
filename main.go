@@ -3,8 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
-	"os"
 	"time"
 
 	"msattack/config"
@@ -13,32 +11,34 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
 func main() {
+	// Unix time is faster and smaller than most timestamps
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+
 	var configuration config.Configuration
 
 	viper.SetConfigFile("./config/config.yml")
+
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Printf("Error reading config file: %s\n", err)
 		var configNotFoundError viper.ConfigFileNotFoundError
 		if ok := errors.As(err, &configNotFoundError); ok {
-			fmt.Println("Please create a config.yml file in the config folder.")
+			log.Fatal().Err(err).Msg("Error reading config file. Please create a config.yml file in the config folder.")
 		} else {
-			fmt.Println("Please ensure that the config.yml file is readable.")
+			log.Fatal().Err(err).Msg("Error reading config file. Please ensure that the config.yml file is readable.")
 		}
-		os.Exit(1)
 	}
+
 	if err := viper.Unmarshal(&configuration); err != nil {
-		fmt.Printf("Error decoding config file: %s\n", err)
-		fmt.Println("Please check that the config.yml file is valid and properly formatted as a YAML file.")
-		os.Exit(1)
+		log.Fatal().Err(err).Msg("Error decoding config file. Please check that the config.yml file is valid and properly formatted as a YAML file.")
 	}
 
 	if configuration.Port <= 0 {
-		fmt.Println("Error: Port in config file must be a positive integer.")
-		os.Exit(1)
+		log.Fatal().Msg("Port in config file must be a positive integer.")
 	}
 
 	app := fiber.New(fiber.Config{
@@ -59,7 +59,7 @@ func main() {
 		return c.Next()
 	})
 
-	fmt.Println("Spinning up server on port:", configuration.Port)
+	log.Info().Msg("Spinning up server on port " + fmt.Sprintf("%d", configuration.Port) + "...")
 
 	port := fmt.Sprintf(":%d", configuration.Port)
 
@@ -67,6 +67,6 @@ func main() {
 
 	err := app.Listen(port)
 	if err != nil {
-		log.Fatalf("Error in starting up server: %s", err)
+		log.Fatal().Err(err).Msg("Error in starting up server!")
 	}
 }
