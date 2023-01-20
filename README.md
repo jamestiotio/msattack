@@ -58,19 +58,19 @@ Coming soon!
    mitmdump -s scripts/proxy.py -k --set stream_large_bodies=1
    ```
 
-7. Run the private server by executing this command from the terminal:
+7. Build the private server executable by executing this command from the terminal:
 
    ```bash
-   go build -o msattack main.go
-   chmod +x ./msattack
+   make all
+   ```
+
+   Then, run the executable by either double-clicking it or calling it via the terminal:
+
+   ```bash
    ./msattack
    ```
 
-   If you are on Windows, you would need to generate an executable file and double-click it to run it:
-
-   ```bash
-   go build -o msattack.exe main.go
-   ```
+   If you are on Windows, the executable's filename would be `msattack.exe`.
 
 8. Have fun and enjoy!
 
