@@ -1,8 +1,43 @@
 {
-  "go.formatTool": "gofumpt",
+  "go.lintTool": "golangci-lint",
+  "go.formatTool": "goimports",
   "go.toolsManagement.autoUpdate": true,
   "go.useLanguageServer": true,
+  "go.autocompleteUnimportedPackages": true,
+  "go.useCodeSnippetsOnFunctionSuggestWithoutType": true,
+  "go.docsTool": "godoc",
+  "go.lintFlags": ["--config=.github/linters/.golangci.yml"],
+  "go.buildOnSave": "off",
+  "go.vetOnSave": "off",
+  "go.lintOnSave": "package",
+  "go.coverageDecorator": {
+    "type": "gutter"
+  },
+  "go.coverageOptions": "showUncoveredCodeOnly",
+  "go.coverOnTestPackage": true,
+  "go.coverOnSingleTest": false,
+  "go.testFlags": ["-v", "-cover", "-count=1"],
+  "go.addTags": {
+    "tags": "json",
+    "promptForTags": false,
+    "transform": "snakecase"
+  },
+  "go.enableCodeLens": {
+    "runtest": true
+  },
   "gopls": {
-    "formatting.gofumpt": true
+    "usePlaceholders": true,
+    "staticcheck": false,
+    // Experimental settings
+    "completeUnimported": true,
+    "deepCompletion": true
+  },
+  "[go]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+    "editor.defaultFormatter": "golang.go",
+    "editor.snippetSuggestions": "inline",
+    "editor.formatOnSave": true
   }
 }
