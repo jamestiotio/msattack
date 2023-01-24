@@ -7,8 +7,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Note that this global variable is read-only
-// Since we use this global variable, once the values of the config file are read and loaded into memory during the server's initialization, any further changes to the config file will not be reflected in this global variable until the server is restarted
+// GlobalConfig is a read-only global variable.
+// Since we use this global variable, once the values of the config file are read and loaded into memory during the server's initialization, any further changes to the config file will not be reflected in this global variable until the server is restarted.
 var GlobalConfig Configuration
 
 type Configuration struct {

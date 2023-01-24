@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-var CUSTOM_TIME_FORMAT string = "2006-01-02 15:04:05"
+const CustomTimeFormat string = "2006-01-02 15:04:05"
 
 type ErrorCode struct {
 	ErrorCode errors.Error `json:"error_code"`
@@ -43,7 +43,7 @@ func GenerateErrorCode(status errors.Error) ErrorCode {
 func GenerateErrorCodeWithTime(status errors.Error) ErrorCodeWithTime {
 	return ErrorCodeWithTime{
 		ErrorCode:  status,
-		NowTime:    time.Now().Format(CUSTOM_TIME_FORMAT),
-		ServerTime: time.Now().Format(CUSTOM_TIME_FORMAT),
+		NowTime:    time.Now().Format(CustomTimeFormat),
+		ServerTime: time.Now().Format(CustomTimeFormat),
 	}
 }

@@ -11,14 +11,14 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-var PACK_INFO_URL = `https://%s%s/pack/%d/`
+const PackInfoURL = `https://%s%s/pack/%d/`
 
 func GetPackInfo(c *fiber.Ctx) error {
 	log.Info().Msg("POST /title/get_pack_info")
 
 	configuration := config.GlobalConfig
 
-	actualPackInfoURL := fmt.Sprintf(PACK_INFO_URL, configuration.StorageDomain, configuration.DataStorageEndpoint, configuration.PackVersion)
+	actualPackInfoURL := fmt.Sprintf(PackInfoURL, configuration.StorageDomain, configuration.DataStorageEndpoint, configuration.PackVersion)
 
 	c.Set("Connection", "close")
 	c.Set("Content-Encoding", "gzip")
