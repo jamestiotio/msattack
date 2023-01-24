@@ -16,6 +16,47 @@ USE_SSL = True
 REMOTE_HOST = "localhost"
 REMOTE_PORT = 42069
 
+MSATTACK_MAIN_DOMAINS = [
+    "msattack.snkplaymore.info",
+    "msatk.snkplaymore.info",
+]
+MSATTACK_DEV_DOMAINS = [
+    "msatkdev.snkplaymore.info",
+    "msatkdev01.snkplaymore.info",
+    "msatkdev02.snkplaymore.info",
+    "msatkdev03.snkplaymore.info",
+    "msatkdev04.snkplaymore.info",
+    "msatkdev05.snkplaymore.info",
+    "msatkdev06.snkplaymore.info",
+    "msatkdev07.snkplaymore.info",
+    "msatkdev08.snkplaymore.info",
+    "msatkdev09.snkplaymore.info",
+    "msatkdev10.snkplaymore.info",
+    "msatkdev01bo.snkplaymore.info",
+    "msatkdev02bo.snkplaymore.info",
+    "msatkdev03bo.snkplaymore.info",
+    "msatkdev04bo.snkplaymore.info",
+    "msatkdev05bo.snkplaymore.info",
+    "msatkdev06bo.snkplaymore.info",
+    "msatkdev07bo.snkplaymore.info",
+    "msatkdev08bo.snkplaymore.info",
+    "msatkdev09bo.snkplaymore.info",
+    "msatkdev10bo.snkplaymore.info",
+    "msatkshinsa.snkplaymore.info",
+    "msatkshinsabo.snkplaymore.info",
+    "msatkstg.snkplaymore.info",
+    "msatkstgbo.snkplaymore.info",
+]
+MSATTACK_STORAGE_DOMAINS = [
+    "strage.snkplaymore.info",
+    "strage.snkplaymore.info.akamaized.net",
+]
+MSATTACK_ADM_DOMAINS = [
+    "msatkadm.snkplaymore.info",
+    "msatkbo.snkplaymore.info",
+    "msatkjenkins.snkplaymore.info",
+]
+
 if os.getenv("MITM_USE_SSL") is not None:
     USE_SSL = bool(os.getenv("MITM_USE_SSL"))
 if os.getenv("MITM_REMOTE_HOST") is not None:
@@ -26,14 +67,10 @@ if os.getenv("MITM_REMOTE_PORT") is not None:
 
 # Define mitmproxy addon classes
 class MSAProxy:
-    DOMAINS = [
-        "msattack.snkplaymore.info",
-        "msatk.snkplaymore.info",
-        "strage.snkplaymore.info",
-    ]
+    TARGET_DOMAINS = MSATTACK_MAIN_DOMAINS + MSATTACK_STORAGE_DOMAINS
 
     def request(self, flow: http.HTTPFlow) -> None:
-        if flow.request.host in self.DOMAINS:
+        if flow.request.host in self.TARGET_DOMAINS:
             if USE_SSL:
                 flow.request.scheme = "https"
             else:
