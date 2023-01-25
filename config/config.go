@@ -14,12 +14,17 @@ var GlobalConfig Configuration
 type Configuration struct {
 	// https://github.com/spf13/viper/issues/385#issuecomment-337264721
 	Port                int    `mapstructure:"PORT"`
+	UseTLS              bool   `mapstructure:"USE_TLS"`
 	MasterVersion       int    `mapstructure:"MASTER_VERSION"`
 	PackVersion         int    `mapstructure:"PACK_VERSION"`
 	IsMaintenanceMode   bool   `mapstructure:"IS_MAINTENANCE_MODE"`
 	MainDomain          string `mapstructure:"MAIN_DOMAIN"`
 	StorageDomain       string `mapstructure:"STORAGE_DOMAIN"`
 	DataStorageEndpoint string `mapstructure:"DATA_STORAGE_ENDPOINT"`
+	TLSCertPath         string `mapstructure:"TLS_CERT_PATH"`
+	TLSKeyPath          string `mapstructure:"TLS_KEY_PATH"`
+	MasterTableFilename string `mapstructure:"MASTER_TABLE_FILENAME"`
+	FileListFilename    string `mapstructure:"FILE_LIST_FILENAME"`
 }
 
 func LoadConfig(path string) {

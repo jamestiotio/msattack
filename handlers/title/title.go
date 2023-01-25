@@ -5,6 +5,7 @@ import (
 
 	"msattack/config"
 	"msattack/errors"
+	"msattack/managers"
 	"msattack/utils"
 
 	"github.com/gofiber/fiber/v2"
@@ -52,8 +53,8 @@ func GetFileList(c *fiber.Ctx) error {
 		// Not sure what these are for (parallel download limits for master table and DLC?)
 		"max_dl_stream_num_for_mtbl": 1,
 		"max_dl_stream_num_for_dlc":  4,
-		"response":                   utils.GenerateErrorCode(errors.SUCCESS),
-		"file_list":                  generateFileList(),
+		"response":                   utils.GenerateErrorCodeWithTime(errors.SUCCESS),
+		"file_list":                  managers.GenerateFileList(),
 	})
 	if err != nil {
 		log.Fatal().Err(err).Msg("Error in getting file list.")

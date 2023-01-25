@@ -60,4 +60,9 @@ ehthumbs.db
 /data/*
 !/data/.gitkeep
 
+# TLS-related files
+/tls/*
+!/tls/.gitkeep
+
+# Main backend server executable
 msattack

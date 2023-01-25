@@ -65,8 +65,15 @@ func main() {
 
 	port := fmt.Sprintf(":%d", configuration.Port)
 
-	err := app.Listen(port)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Error in starting up server!")
+	if configuration.UseTLS {
+		err := app.ListenTLS(port, configuration.TLSCertPath, configuration.TLSKeyPath)
+		if err != nil {
+			log.Fatal().Err(err).Msg("Error in starting up server!")
+		}
+	} else {
+		err := app.Listen(port)
+		if err != nil {
+			log.Fatal().Err(err).Msg("Error in starting up server!")
+		}
 	}
 }

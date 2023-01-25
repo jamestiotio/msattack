@@ -1,7 +1,12 @@
 PORT: 42069
+USE_TLS: true
 MASTER_VERSION: 7130000
 PACK_VERSION: 6120000
 IS_MAINTENANCE_MODE: false
 MAIN_DOMAIN: "msattack.snkplaymore.info"
 STORAGE_DOMAIN: "strage.snkplaymore.info"
 DATA_STORAGE_ENDPOINT: "/snkp/msatk/prod"
+TLS_CERT_PATH: "tls/snkplaymore.info.crt"
+TLS_KEY_PATH: "tls/snkplaymore.info.key"
+MASTER_TABLE_FILENAME: "data/master_table.json"
+FILE_LIST_FILENAME: "data/file_list.json"

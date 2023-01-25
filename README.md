@@ -52,13 +52,23 @@ Coming soon!
 
    - If the original Metal Slug Attack servers are not up anymore, you would need to source this binary data from elsewhere. I am not including them in this repository due to 2 main reasons: to prevent copyright strikes or DMCA takedowns as the copyright for those binary assets are still owned by SNK CORPORATION, as well as to keep the size of this repository small and lean. Technically, sharing these assets should be fine since they are provided for free by default when players download and install the game anyway, which has a free "entry fee", and that sharing these assets for free do not decrease the potential revenue/profit that SNK CORPORATION would be able to make from players, but it is better to be safe than sorry. I will keep a lookout on the possible ways to publicly serve this content without violating any copyright laws (feel free to inform me if you have any information about this by publicly raising an issue or privately emailing me).
 
-6. You can now run the proxy service needed for the private server. If you are using `mitmproxy`, a script for `mitmproxy` has been provided [here](./scripts/proxy.py). Simply execute the following command:
+6. By default, the server uses TLS (HTTPS). Hence, in order for the server to be able to function properly, you would need to generate a self-signed TLS certificate-key pair using `openssl`:
 
    ```bash
-   mitmdump -s scripts/proxy.py -k --set stream_large_bodies=1
+   cd tls
+   openssl genrsa -out snkplaymore.info.key 4096
+   openssl req -key snkplaymore.info.key -new -x509 -days 25202 -out snkplaymore.info.crt
    ```
 
-7. Build the private server executable by executing this command from the terminal:
+   Alternatively, you can disable TLS by setting the `USE_TLS` flags in [config.yml](./config/config.yml) and [proxy.py](./scripts/proxy.py) to false.
+
+7. You can now run the proxy service needed for the private server. If you are using `mitmproxy`, a script for `mitmproxy` has been provided [here](./scripts/proxy.py). Simply execute the following command:
+
+   ```bash
+   mitmdump -s scripts/proxy.py -k --set stream_large_bodies=1 --set ssl_insecure=true
+   ```
+
+8. Build the private server executable by executing this command from the terminal:
 
    ```bash
    make all
@@ -72,7 +82,7 @@ Coming soon!
 
    If you are on Windows, the executable's filename would be `msattack.exe`.
 
-8. Have fun and enjoy!
+9. Have fun and enjoy!
 
 ## Troubleshooting
 

@@ -12,7 +12,7 @@ from mitmproxy import connection, ctx, http, tls
 from mitmproxy.utils import human
 
 # Define global variables
-USE_SSL = True
+USE_TLS = True
 REMOTE_HOST = "localhost"
 REMOTE_PORT = 42069
 
@@ -57,8 +57,8 @@ MSATTACK_ADM_DOMAINS = [
     "msatkjenkins.snkplaymore.info",
 ]
 
-if os.getenv("MITM_USE_SSL") is not None:
-    USE_SSL = bool(os.getenv("MITM_USE_SSL"))
+if os.getenv("MITM_USE_TLS") is not None:
+    USE_TLS = bool(os.getenv("MITM_USE_TLS"))
 if os.getenv("MITM_REMOTE_HOST") is not None:
     REMOTE_HOST = os.getenv("MITM_REMOTE_HOST")
 if os.getenv("MITM_REMOTE_PORT") is not None:
@@ -71,7 +71,7 @@ class MSAProxy:
 
     def request(self, flow: http.HTTPFlow) -> None:
         if flow.request.host in self.TARGET_DOMAINS:
-            if USE_SSL:
+            if USE_TLS:
                 flow.request.scheme = "https"
             else:
                 flow.request.scheme = "http"

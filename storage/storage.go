@@ -1,9 +1,7 @@
 package storage
 
 import (
-	"errors"
 	"fmt"
-	"os"
 
 	"msattack/config"
 
@@ -14,19 +12,15 @@ import (
 func GetPackFile(c *fiber.Ctx) error {
 	configuration := config.GlobalConfig
 	log.Info().Msg(fmt.Sprintf("%s/pack/%d/%s", configuration.DataStorageEndpoint, configuration.PackVersion, c.Params("pack_file_name")))
-	filePath := fmt.Sprintf("data/pack/%d/%s", configuration.PackVersion, c.Params("pack_file_name"))
+	filepath := fmt.Sprintf("data/pack/%d/%s", configuration.PackVersion, c.Params("pack_file_name"))
 
-	_, err := os.Stat(filePath)
-	switch {
-	case err == nil:
-		return c.SendFile(filePath, true)
-	case errors.Is(err, os.ErrNotExist):
-		log.Warn().Err(err).Msg("Pack file not found.")
+	err := c.SendFile(filepath, true)
+
+	if err != nil {
+		log.Warn().Msg("Error in getting pack file. Ensure that the pack file exists and is accessible.")
 		return c.SendStatus(fiber.StatusNotFound)
-	default:
-		// Schrodinger's file! File may or may not exist.
-		log.Error().Err(err).Msg("Error in getting pack file.")
-		return c.SendStatus(fiber.StatusInternalServerError)
+	} else {
+		return err
 	}
 }
 
@@ -38,18 +32,14 @@ func GetDataFile(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
 	log.Info().Msg(fmt.Sprintf("%s/%d/%s", configuration.DataStorageEndpoint, versionNumber, c.Params("file_name")))
-	filePath := fmt.Sprintf("data/%d/%s", versionNumber, c.Params("file_name"))
+	filepath := fmt.Sprintf("data/%d/%s", versionNumber, c.Params("file_name"))
 
-	_, err = os.Stat(filePath)
-	switch {
-	case err == nil:
-		return c.SendFile(filePath, true)
-	case errors.Is(err, os.ErrNotExist):
-		log.Warn().Err(err).Msg("Data file not found.")
+	err = c.SendFile(filepath, true)
+
+	if err != nil {
+		log.Warn().Msg("Error in getting data file. Ensure that the data file exists and is accessible.")
 		return c.SendStatus(fiber.StatusNotFound)
-	default:
-		// Schrodinger's file! File may or may not exist.
-		log.Error().Err(err).Msg("Error in getting data file.")
-		return c.SendStatus(fiber.StatusInternalServerError)
+	} else {
+		return err
 	}
 }

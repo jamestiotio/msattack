@@ -15,6 +15,8 @@ MASTER_TABLE_FILENAME = "master_table.json"
 MASTER_TABLE_URL = "msattack.snkplaymore.info/title/get_master_table"
 STORAGE_URL = "strage.snkplaymore.info/snkp/msatk/prod"
 STORAGE_PACK_URL = f"{STORAGE_URL}/pack"
+FILE_LIST_FILENAME = "file_list.json"
+FILE_LIST_URL = "msattack.snkplaymore.info/title/get_file_list"
 
 
 class AssetDownloader:
@@ -85,6 +87,19 @@ class AssetDownloader:
 
             with open(f"data/{MASTER_TABLE_FILENAME}", "wt+") as f:
                 json.dump(master_table, f, indent=2)
+
+        elif FILE_LIST_URL in flow.request.pretty_url:
+            try:
+                file_list = json.loads(flow.response.get_text())["file_list"]
+                try:
+                    with open(f"data/{FILE_LIST_FILENAME}", "xt+") as f:
+                        print(f"Saving the file list...")
+                        json.dump(file_list, f, indent=2)
+                except FileExistsError:
+                    print(f"File list already exists. Skipping...")
+
+            except json.decoder.JSONDecodeError:
+                print(f"Response body is not JSON. Skipping...")
 
 
 addons = [AssetDownloader()]
