@@ -21,11 +21,6 @@ func GetPackInfo(c *fiber.Ctx) error {
 
 	actualPackInfoURL := fmt.Sprintf(PackInfoURL, configuration.StorageDomain, configuration.DataStorageEndpoint, configuration.PackVersion)
 
-	c.Set("Connection", "close")
-	c.Set("Content-Encoding", "gzip")
-	c.Set("Server", "Apache")
-	c.Set("Vary", "Accept-Encoding")
-
 	err := c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"version":  configuration.PackVersion,
 		"url":      actualPackInfoURL,
@@ -35,6 +30,11 @@ func GetPackInfo(c *fiber.Ctx) error {
 		log.Fatal().Err(err).Msg("Error in getting pack info.")
 	}
 
+	c.Set("Connection", "close")
+	c.Set("Content-Encoding", "gzip")
+	c.Set("Server", "Apache")
+	c.Set("Vary", "Accept-Encoding")
+
 	return err
 }
 
@@ -42,11 +42,6 @@ func GetFileList(c *fiber.Ctx) error {
 	log.Info().Msg("POST /title/get_file_list")
 
 	configuration := config.GlobalConfig
-
-	c.Set("Connection", "close")
-	c.Set("Content-Encoding", "gzip")
-	c.Set("Server", "Apache")
-	c.Set("Vary", "Accept-Encoding")
 
 	err := c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"master_ver": configuration.MasterVersion,
@@ -59,6 +54,11 @@ func GetFileList(c *fiber.Ctx) error {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Error in getting file list.")
 	}
+
+	c.Set("Connection", "close")
+	c.Set("Content-Encoding", "gzip")
+	c.Set("Server", "Apache")
+	c.Set("Vary", "Accept-Encoding")
 
 	return err
 }

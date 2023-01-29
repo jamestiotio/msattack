@@ -10,6 +10,7 @@ from enum import Enum
 
 from mitmproxy import connection, ctx, http, tls
 from mitmproxy.utils import human
+from mitmproxy.script import concurrent
 
 # Define global variables
 USE_TLS = True
@@ -69,6 +70,7 @@ if os.getenv("MITM_REMOTE_PORT") is not None:
 class MSAProxy:
     TARGET_DOMAINS = MSATTACK_MAIN_DOMAINS + MSATTACK_STORAGE_DOMAINS
 
+    @concurrent
     def request(self, flow: http.HTTPFlow) -> None:
         if flow.request.host in self.TARGET_DOMAINS:
             if USE_TLS:
