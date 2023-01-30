@@ -65,7 +65,7 @@ Coming soon!
 7. You can now run the proxy service needed for the private server. If you are using `mitmproxy`, a script for `mitmproxy` has been provided [here](./scripts/proxy.py). Simply execute the following command:
 
    ```bash
-   mitmdump -s scripts/proxy.py -k --set stream_large_bodies=1 --set ssl_insecure=true --set keep_host_header=true --set upstream_cert=false --set keepserving=true --quiet
+   mitmdump -s scripts/proxy.py -k --set ssl_insecure=true --set keep_host_header=true --set upstream_cert=false --set keepserving=true --quiet
    ```
 
 8. Build the private server executable by executing this command from the terminal:

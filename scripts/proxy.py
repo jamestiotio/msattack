@@ -80,6 +80,10 @@ class MSAProxy:
             flow.request.host = REMOTE_HOST
             flow.request.port = REMOTE_PORT
 
+    @concurrent
+    def responseheaders(self, flow: http.HTTPFlow) -> None:
+        flow.response.stream = True
+
 
 class InterceptionResult(Enum):
     SUCCESS = 1
