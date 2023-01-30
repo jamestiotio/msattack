@@ -100,8 +100,8 @@ This error is derived from the server being unable to bind to a certain port. En
 
 - This project is non-commercial. The source code is available for free (both gratis and libre) and always will be.
 
-- This is a black-box re-implementation project. The code in this project was written by observing the game running and inspecting the data being transmitted between the game process and the backend server to figure out the expected behavior of the private API. This should put this project in the clear, legally speaking. If someone at SNK disagrees, feel free to contact me.
+- This is a black-box re-implementation project which adopts the [clean-room design](https://en.wikipedia.org/wiki/Clean_room_design) approach. The code in this project was written by observing the game running, inspecting the data being transmitted between the game process and the backend server to figure out the expected behavior and specifications of the private API, and then manually recreating/developing the private server to satisfy said specifications. This should put this project in the clear, legally speaking. If someone at SNK disagrees, feel free to contact me.
 
-- If you want to contribute to this repository, your contribution must be either your own original code or open-source code with a clear acknowledgement of its origin. No code that was acquired through reverse engineering executable binaries or binary files will be accepted.
+- If you want to contribute to this repository, your contribution must be either your own original code or open-source code with a clear acknowledgement of its origin. No code that was acquired through decompiling, disassembling, or reverse engineering executable binaries or binary files will be accepted as such methods are prohibited by [SNK CORPORATION's Terms of Service for METAL SLUG ATTACK](https://www.snk-corp.co.jp/us/games/apps/metalslug_attack/terms/).
 
 - No assets from the original game are included in this repository.
