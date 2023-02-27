@@ -1,5 +1,5 @@
-//go:build linux || darwin
-// +build linux darwin
+//go:build darwin || linux
+// +build darwin linux
 
 /*
  * Copyright 2021 ByteDance Inc.
@@ -36,15 +36,15 @@ const (
 type Loader   []byte
 type Function unsafe.Pointer
 
-func (self Loader) LoadWithFaker(fn string, fp int, args int, faker interface{}) (f Function) {
+func (self Loader) Load(fn string, fp int, args int, argPtrs []bool, localPtrs []bool) (f Function) {
     p := os.Getpagesize()
     n := (((len(self) - 1) / p) + 1) * p
 
     /* register the function */
     m := mmap(n)
     v := fmt.Sprintf("runtime.__%s_%x", fn, m)
-    argsptr, localsptr := stackMap(faker)
-    registerFunction(v, m, uintptr(n), fp, args, uintptr(len(self)), argsptr, localsptr)
+    
+    registerFunction(v, m, uintptr(n), fp, args, uintptr(len(self)), argPtrs, localPtrs)
 
     /* reference as a slice */
     s := *(*[]byte)(unsafe.Pointer(&reflect.SliceHeader {
@@ -57,10 +57,6 @@ func (self Loader) LoadWithFaker(fn string, fp int, args int, faker interface{})
     copy(s, self)
     mprotect(m, n)
     return Function(&m)
-}
-
-func (self Loader) Load(fn string, fp int, args int) (f Function) {
-    return self.LoadWithFaker(fn, fp, args, func(){})
 }
 
 func mmap(nb int) uintptr {
