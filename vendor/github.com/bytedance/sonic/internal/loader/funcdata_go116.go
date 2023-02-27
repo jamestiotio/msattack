@@ -1,3 +1,4 @@
+//go:build go1.16 && !go1.18
 // +build go1.16,!go1.18
 
 /*
@@ -126,9 +127,14 @@ func makePCtab(fp int) []byte {
     return append([]byte{0}, encodeVariant((fp + 1) << 1)...)
 }
 
-func registerFunction(name string, pc uintptr, textSize uintptr, fp int, args int, size uintptr, argptrs uintptr, localptrs uintptr) {
+func registerFunction(name string, pc uintptr, textSize uintptr, fp int, args int, size uintptr, argPtrs []bool, localPtrs []bool) {
+    mod := new(_ModuleData)
+    
     minpc := pc
     maxpc := pc + size
+
+    // cache arg and local stackmap
+    argptrs, localptrs := cacheStackmap(argPtrs, localPtrs, mod)
 
     /* function entry */
     lnt := []_Func {{
@@ -137,8 +143,8 @@ func registerFunction(name string, pc uintptr, textSize uintptr, fp int, args in
         args      : int32(args),
         pcsp      : 1,
         nfuncdata : 2,
-        argptrs   : argptrs,
-        localptrs : localptrs,
+        argptrs   : uintptr(argptrs),
+        localptrs : uintptr(localptrs),
     }}
 
     /* function table */
@@ -149,7 +155,7 @@ func registerFunction(name string, pc uintptr, textSize uintptr, fp int, args in
     }
 
     /* module data */
-    mod := &_ModuleData {
+    *mod = _ModuleData {
         pcHeader    : modHeader,
         funcnametab : append(append([]byte{0}, name...), 0),
         pctab       : append(makePCtab(fp), encodeVariant(int(size))...),
