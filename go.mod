@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/bytedance/sonic v1.8.2
 	github.com/gofiber/fiber/v2 v2.42.0
-	github.com/rs/zerolog v1.29.0
+	github.com/rs/zerolog v1.29.1
 )
 
 require (
